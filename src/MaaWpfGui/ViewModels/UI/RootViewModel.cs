@@ -52,7 +52,14 @@ namespace MaaWpfGui.ViewModels.UI
 
         private bool CheckAndUpdateNow()
         {
-            return Instances.VersionUpdateViewModel.CheckAndUpdateNow();
+            var vm = new VersionUpdateViewModel();
+
+            vm.ShowReleaseNotes();
+
+            // FIXME
+            // return Instances.VersionUpdateViewModel.CheckAndUpdateNow();
+            return true;
+            //throw new Exception();
         }
 
         private string _windowTitle = "MAA";

@@ -176,7 +176,13 @@
     <system:String x:Key="NewVersionDownloadFailedTitle">Update Package Download Failed</system:String>
     <system:String x:Key="NewVersionDownloadFailedDesc">Please download the zip file manually and place it in the directory.</system:String>
     <system:String x:Key="NewVersionDownloadCompletedTitle">Update Package Download Completed</system:String>
-    <system:String x:Key="NewVersionDownloadCompletedDesc">Do you want to upgrade MAA immediately? (restart the process)</system:String>
+    <system:String x:Key="NewVersionDownloadCompletedDesc">Do you want to update MAA now?</system:String>
+    <system:String x:Key="ApplyUpdateNowIdle">Update now</system:String>
+    <system:String x:Key="ApplyUpdateNowRunning">Stop running tasks and update now</system:String>
+    <system:String x:Key="ApplyUpdateNowDescription">MAA will restart.</system:String>
+    <system:String x:Key="ApplyUpdateLater">Later</system:String>
+    <system:String x:Key="ApplyUpdateLaterDescription">MAA will be updated on next startup.</system:String>
+    <system:String x:Key="CloseButton">Close</system:String>
 
     <system:String x:Key="NewVersionFoundButNoPackageTitle">New Version Found, But No Update Package</system:String>
     <system:String x:Key="NewVersionFoundButNoPackageDesc">Please download the full package manually to update.</system:String>
@@ -578,8 +584,22 @@ The video resolution is required to be 16:9, and there are no interference facto
 
     <!--  VersionUpdatePopup  -->
     <system:String x:Key="UpdateNotificationOK">OK!</system:String>
-    <system:String x:Key="VersionUpdated">Version Updated</system:String>
-    <system:String x:Key="VersionUpdatedTo">Version:</system:String>
+    <system:String x:Key="SoftwareUpdate">MAA Update</system:String>
+    <system:String x:Key="UpdateAvailableTitle">A new version of MAA is available</system:String>
+    <system:String x:Key="UpdateAvailableDescription`2">MAA {0} is available. You are on {1}.</system:String>
+    <system:String x:Key="UpdateDownloadingTitle">Downloading MAA update</system:String>
+    <system:String x:Key="UpdateDownloadingDescription`2">MAA will be updated to {0}. You are on {1}.</system:String>
+    <system:String x:Key="UpdatePendingTitle">MAA will be updated on restart</system:String>
+    <system:String x:Key="UpdatePendingDescription`2">MAA will be updated to {0}. You are on {1}.</system:String>
+    <system:String x:Key="UpdateCompleteTitle">MAA has been updated</system:String>
+    <system:String x:Key="UpdateCompleteDescription`1">You are on {0}.</system:String>
+    <system:String x:Key="ReleaseNotes">Release notes:</system:String>
+    <system:String x:Key="AutoUpdateCheckBox">Download updates automatically</system:String>
+    <system:String x:Key="DownloadAndInstallUpdateButton">Download &amp; Install</system:String>
+    <system:String x:Key="RestartButton">Restart MAA</system:String>
+    <system:String x:Key="InstallLaterButton">Later</system:String>
+    <system:String x:Key="RemindMeLaterButton">Remind Me Later</system:String>
+    <system:String x:Key="SkipThisVersionButton">Skip This Version</system:String>
     <!--  VersionUpdatePopup  -->
 
     <!-- RootViewModel -->

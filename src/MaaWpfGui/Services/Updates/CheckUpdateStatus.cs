@@ -1,0 +1,53 @@
+// <copyright file="VersionUpdateViewModel.cs" company="MaaAssistantArknights">
+// MaaWpfGui - A part of the MaaCoreArknights project
+// Copyright (C) 2021 MistEO and Contributors
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY
+// </copyright>
+
+namespace MaaWpfGui.Services.Updates
+{
+    public enum CheckUpdateStatus
+    {
+        /// <summary>
+        /// 操作成功
+        /// </summary>
+        OK,
+
+        /// <summary>
+        /// 未知错误
+        /// </summary>
+        UnknownError,
+
+        /// <summary>
+        /// 无需更新
+        /// </summary>
+        NoNeedToUpdate,
+
+        /// <summary>
+        /// 已经是最新版
+        /// </summary>
+        AlreadyLatest,
+
+        /// <summary>
+        /// 网络错误
+        /// </summary>
+        NetworkError,
+
+        /// <summary>
+        /// 获取信息失败
+        /// </summary>
+        FailedToGetInfo,
+
+        /// <summary>
+        /// 新版正在构建中
+        /// </summary>
+        NewVersionIsBeingBuilt,
+    }
+}

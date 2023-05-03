@@ -18,6 +18,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using MaaWpfGui.Constants;
 using MaaWpfGui.Extensions;
@@ -72,21 +73,29 @@ namespace MaaWpfGui.Services.Web
             BuildDownloaderHttpClient();
         }
 
-        public async Task<string> GetStringAsync(Uri uri, Dictionary<string, string> extraHeader = null)
+        public async Task<string> GetStringAsync(Uri uri, Dictionary<string, string> extraHeader = null, CancellationToken ct = default)
         {
-            var response = await GetAsync(uri, extraHeader);
+            var response = await GetAsync(uri, extraHeader, ct);
 
             if (response != null)
             {
-                return await response.Content.ReadAsStringAsync();
+                var reg = ct.Register(response.Dispose);
+                try
+                {
+                    return await response.Content.ReadAsStringAsync();
+                }
+                finally
+                {
+                    reg.Dispose();
+                }
             }
 
             return null;
         }
 
-        public async Task<Stream> GetStreamAsync(Uri uri, Dictionary<string, string> extraHeader = null)
+        public async Task<Stream> GetStreamAsync(Uri uri, Dictionary<string, string> extraHeader = null, CancellationToken ct = default)
         {
-            var response = await GetAsync(uri, extraHeader);
+            var response = await GetAsync(uri, extraHeader, ct);
 
             if (response != null)
             {
@@ -96,7 +105,7 @@ namespace MaaWpfGui.Services.Web
             return null;
         }
 
-        public async Task<HttpResponseMessage> GetAsync(Uri uri, Dictionary<string, string> extraHeader = null)
+        public async Task<HttpResponseMessage> GetAsync(Uri uri, Dictionary<string, string> extraHeader = null, CancellationToken ct = default)
         {
             try
             {
@@ -114,7 +123,7 @@ namespace MaaWpfGui.Services.Web
                     }
                 }
 
-                var response = await _client.SendAsync(request);
+                var response = await _client.SendAsync(request, ct);
                 response.Log();
 
                 return response.IsSuccessStatusCode is false ? null : response;
@@ -126,7 +135,7 @@ namespace MaaWpfGui.Services.Web
             }
         }
 
-        public async Task<string> PostAsJsonAsync<T>(Uri uri, T content, Dictionary<string, string> extraHeader = null)
+        public async Task<string> PostAsJsonAsync<T>(Uri uri, T content, Dictionary<string, string> extraHeader = null, CancellationToken ct = default)
         {
             try
             {
@@ -134,9 +143,11 @@ namespace MaaWpfGui.Services.Web
                 var message = new HttpRequestMessage(HttpMethod.Post, uri);
                 message.Headers.Accept.ParseAdd("application/json");
                 message.Content = new StringContent(body, Encoding.UTF8, "application/json");
-                var response = await _client.SendAsync(message);
+                var response = await _client.SendAsync(message, ct);
                 response.Log();
-                return await response.Content.ReadAsStringAsync();
+
+                // FIXME: ReadAsStringAsync does not have overload that accepts a CancellationToken in .NET Framework
+                return await response.Content.ReadAsStringAsync().WaitAsync(ct);
             }
             catch (Exception e)
             {
@@ -145,7 +156,7 @@ namespace MaaWpfGui.Services.Web
             }
         }
 
-        public async Task<bool> DownloadFileAsync(Uri uri, string fileName, string contentType = null)
+        public async Task<bool> DownloadFileAsync(Uri uri, string fileName, IHttpService.ProgressCallback callback, string contentType = null, CancellationToken ct = default)
         {
             string fileDir = Directory.GetCurrentDirectory();
             string fileNameWithTemp = fileName + ".temp";
@@ -153,7 +164,7 @@ namespace MaaWpfGui.Services.Web
             string fullFilePathWithTemp = Path.Combine(fileDir, fileNameWithTemp);
             _logger.Information("Start to download file from {Uri} and save to {TempPath}", uri, fullFilePathWithTemp);
 
-            var response = await GetAsync(uri, extraHeader: new Dictionary<string, string> { { "Accept", contentType } });
+            var response = await GetAsync(uri, extraHeader: new Dictionary<string, string> { { "Accept", contentType } }, ct: ct);
 
             if (response is null)
             {
@@ -161,22 +172,24 @@ namespace MaaWpfGui.Services.Web
             }
 
             var success = true;
+
             try
             {
-                var stream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
+                // FIXME: ReadAsStreamAsync does not have overload that accepts a CancellationToken in .NET Framework
+                var stream = await response.Content.ReadAsStreamAsync().WaitAsync(ct).ConfigureAwait(false);
                 using (var tempFileStream = new FileStream(fullFilePathWithTemp, FileMode.Create, FileAccess.Write))
                 {
                     // 记录初始化
                     long value = 0;
                     int valueInOneSecond = 0;
-                    long fileMaximum = response.Content.Headers.ContentLength ?? 1;
+                    long fileMaximum = response.Content.Headers.ContentLength ?? -1;
                     DateTime beforeDt = DateTime.Now;
 
                     // Dangerous action
-                    VersionUpdateViewModel.OutputDownloadProgress();
+                    callback?.Invoke(value, fileMaximum);
 
                     byte[] buffer = new byte[81920];
-                    int byteLen = await stream.ReadAsync(buffer, 0, buffer.Length);
+                    int byteLen = await stream.ReadAsync(buffer, 0, buffer.Length, ct);
 
                     while (byteLen > 0)
                     {
@@ -188,17 +201,17 @@ namespace MaaWpfGui.Services.Web
                             value += valueInOneSecond;
 
                             // Dangerous action
-                            VersionUpdateViewModel.OutputDownloadProgress(value, fileMaximum, valueInOneSecond, ts);
+                            callback?.Invoke(value, fileMaximum);
                             valueInOneSecond = 0;
                         }
 
                         // 输入输出
-                        tempFileStream.Write(buffer, 0, byteLen);
-                        byteLen = await stream.ReadAsync(buffer, 0, buffer.Length);
+                        await tempFileStream.WriteAsync(buffer, 0, byteLen, ct);
+                        byteLen = await stream.ReadAsync(buffer, 0, buffer.Length, ct);
                     }
                 }
 
-                File.Copy(fullFilePathWithTemp, fullFilePath, true);
+                File.Move(fullFilePathWithTemp, fullFilePath);
             }
             catch (Exception e)
             {

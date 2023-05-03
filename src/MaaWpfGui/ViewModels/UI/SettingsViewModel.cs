@@ -32,6 +32,7 @@ using MaaWpfGui.Extensions;
 using MaaWpfGui.Helper;
 using MaaWpfGui.Main;
 using MaaWpfGui.Services.HotKeys;
+using MaaWpfGui.Services.Updates;
 using MaaWpfGui.Utilities;
 using MaaWpfGui.Utilities.ValueType;
 using Microsoft.Win32;
@@ -1888,35 +1889,36 @@ namespace MaaWpfGui.ViewModels.UI
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         public async Task ManualUpdate()
         {
-            var ret = await Instances.VersionUpdateViewModel.CheckAndDownloadUpdate(true);
+            var ret = await Instances.UpdateService.CheckUpdate();
 
             string toastMessage = null;
             switch (ret)
             {
-                case VersionUpdateViewModel.CheckUpdateRetT.NoNeedToUpdate:
+                case CheckUpdateStatus.NoNeedToUpdate:
                     break;
 
-                case VersionUpdateViewModel.CheckUpdateRetT.AlreadyLatest:
+                case CheckUpdateStatus.AlreadyLatest:
                     toastMessage = LocalizationHelper.GetString("AlreadyLatest");
                     break;
 
-                case VersionUpdateViewModel.CheckUpdateRetT.UnknownError:
+                case CheckUpdateStatus.UnknownError:
                     toastMessage = LocalizationHelper.GetString("NewVersionDetectFailedTitle");
                     break;
 
-                case VersionUpdateViewModel.CheckUpdateRetT.NetworkError:
+                case CheckUpdateStatus.NetworkError:
                     toastMessage = LocalizationHelper.GetString("CheckNetworking");
                     break;
 
-                case VersionUpdateViewModel.CheckUpdateRetT.FailedToGetInfo:
+                case CheckUpdateStatus.FailedToGetInfo:
                     toastMessage = LocalizationHelper.GetString("GetReleaseNoteFailed");
                     break;
 
-                case VersionUpdateViewModel.CheckUpdateRetT.OK:
-                    Instances.VersionUpdateViewModel.AskToRestart();
+                case CheckUpdateStatus.OK:
+                    //FIXME
+                    //Execute.OnUIThread(Instances.VersionUpdateViewModel.AskToRestart);
                     break;
 
-                case VersionUpdateViewModel.CheckUpdateRetT.NewVersionIsBeingBuilt:
+                case CheckUpdateStatus.NewVersionIsBeingBuilt:
                     toastMessage = LocalizationHelper.GetString("NewVersionIsBeingBuilt");
                     break;
             }
@@ -1933,7 +1935,8 @@ namespace MaaWpfGui.ViewModels.UI
 
         public void ShowChangelog()
         {
-            Instances.WindowManager.ShowWindow(Instances.VersionUpdateViewModel);
+            var vm = new VersionUpdateViewModel();
+            vm.ShowReleaseNotes();
         }
 
         /* 连接设置 */

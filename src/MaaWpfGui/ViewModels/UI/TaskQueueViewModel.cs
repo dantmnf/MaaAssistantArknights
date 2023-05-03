@@ -150,7 +150,7 @@ namespace MaaWpfGui.ViewModels.UI
         }
         */
 
-        public bool Running { get; set; }
+        public bool Running { get => true; set { } }
 
         private readonly DispatcherTimer _timer = new DispatcherTimer();
 

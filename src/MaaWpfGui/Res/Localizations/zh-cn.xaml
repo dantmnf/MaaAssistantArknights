@@ -177,7 +177,12 @@
     <system:String x:Key="NewVersionDownloadFailedTitle">新版本下载失败</system:String>
     <system:String x:Key="NewVersionDownloadFailedDesc">请尝试手动下载后，将压缩包放到目录下_(:з」∠)_</system:String>
     <system:String x:Key="NewVersionDownloadCompletedTitle">新版本下载完成</system:String>
-    <system:String x:Key="NewVersionDownloadCompletedDesc">是否立即更新 MAA？（重启进程）</system:String>
+    <system:String x:Key="NewVersionDownloadCompletedDesc">是否立即更新 MAA？</system:String>
+    <system:String x:Key="ApplyUpdateNowIdle">立即更新</system:String>
+    <system:String x:Key="ApplyUpdateNowRunning">停止任务并立即更新</system:String>
+    <system:String x:Key="ApplyUpdateNowDescription">MAA 将重新启动。</system:String>
+    <system:String x:Key="ApplyUpdateLater">稍后更新</system:String>
+    <system:String x:Key="ApplyUpdateLaterDescription">MAA 将在下次启动时更新。</system:String>
 
     <system:String x:Key="NewVersionFoundButNoPackageTitle">检测到新版本，但未找到增量包</system:String>
     <system:String x:Key="NewVersionFoundButNoPackageDesc">请手动下载完整包更新！</system:String>
@@ -603,8 +608,22 @@
 
     <!--  VersionUpdatePopup  -->
     <system:String x:Key="UpdateNotificationOK">好的！</system:String>
-    <system:String x:Key="VersionUpdated">版本已更新</system:String>
-    <system:String x:Key="VersionUpdatedTo">已更新：</system:String>
+    <system:String x:Key="SoftwareUpdate">MAA 更新</system:String>
+    <system:String x:Key="UpdateAvailableTitle">MAA 已发布新版本</system:String>
+    <system:String x:Key="UpdateAvailableDescription`2">MAA {0} 已发布。当前的版本是 {1}。</system:String>
+    <system:String x:Key="UpdateDownloadingTitle">正在下载 MAA 更新</system:String>
+    <system:String x:Key="UpdateDownloadingDescription`2">MAA 即将更新到 {0}。当前的版本是 {1}。</system:String>
+    <system:String x:Key="UpdatePendingTitle">MAA 将在重新启动后更新</system:String>
+    <system:String x:Key="UpdatePendingDescription`2">MAA 即将更新到 {0}。当前的版本是 {1}。</system:String>
+    <system:String x:Key="UpdateCompleteTitle">MAA 已更新</system:String>
+    <system:String x:Key="UpdateCompleteDescription`1">当前的版本是 {0}。</system:String>
+    <system:String x:Key="ReleaseNotes">发行说明：</system:String>
+    <system:String x:Key="AutoUpdateCheckBox">自动下载更新</system:String>
+    <system:String x:Key="DownloadAndInstallUpdateButton">下载并安装更新</system:String>
+    <system:String x:Key="RestartButton">重新启动 MAA</system:String>
+    <system:String x:Key="InstallLaterButton">稍后更新</system:String>
+    <system:String x:Key="RemindMeLaterButton">下次一定</system:String>
+    <system:String x:Key="SkipThisVersionButton">忽略此版本</system:String>
     <!--  VersionUpdatePopup  -->
 
     <!-- RootViewModel -->

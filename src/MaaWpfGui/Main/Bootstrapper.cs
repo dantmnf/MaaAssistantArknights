@@ -21,6 +21,7 @@ using MaaWpfGui.Helper;
 using MaaWpfGui.Services;
 using MaaWpfGui.Services.HotKeys;
 using MaaWpfGui.Services.Managers;
+using MaaWpfGui.Services.Updates;
 using MaaWpfGui.Services.Web;
 using MaaWpfGui.ViewModels.UI;
 using MaaWpfGui.Views.UI;
@@ -133,6 +134,8 @@ namespace MaaWpfGui.Main
 
             builder.Bind<IHttpService>().To<HttpService>().InSingletonScope();
             builder.Bind<IMaaApiService>().To<MaaApiService>().InSingletonScope();
+
+            builder.Bind<UpdateService>().ToSelf().InSingletonScope();
         }
 
         protected override void Configure()
@@ -151,7 +154,7 @@ namespace MaaWpfGui.Main
         /// <inheritdoc/>
         protected override void OnLaunch()
         {
-            Instances.VersionUpdateViewModel.ShowUpdateOrDownload();
+            VersionUpdateViewModel.ShowReleaseNotesForMigration();
         }
 
         /// <inheritdoc/>

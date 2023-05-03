@@ -5,8 +5,8 @@
     <AssemblyName>MAA</AssemblyName>
     <TargetFramework>net48</TargetFramework>
     <TargetFramework Condition="'$(Platform)' == 'ARM64'">net481</TargetFramework>
-	<Platforms>x64;ARM64</Platforms>
-	<Configurations>Release;RelWithDebInfo;Debug</Configurations>
+  <Platforms>x64;ARM64</Platforms>
+  <Configurations>Release;RelWithDebInfo;Debug</Configurations>
     <SupportUrl>https://github.com/MaaAssistantArknights/MaaAssistantArknights</SupportUrl>
     <ErrorReportUrl>https://github.com/MaaAssistantArknights/MaaAssistantArknights/issues</ErrorReportUrl>
     <ProductName>MAA</ProductName>
@@ -19,7 +19,7 @@
     <StartupObject>MaaWpfGui.App</StartupObject>
     <LangVersion>8.0</LangVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-	<UseWpf>true</UseWpf>
+  <UseWpf>true</UseWpf>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
     <OutputPath>..\..\$(Platform)\$(Configuration)\</OutputPath>
@@ -54,7 +54,14 @@
     <PackageReference Include="CalcBinding">
       <Version>2.5.2</Version>
     </PackageReference>
-    <PackageReference Include="Costura.Fody" Condition="'$(Configuration)' == 'Release'">
+    <PackageReference Include="Fody" Version="6.7.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="PropertyChanged.Fody" Version="4.1.0">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Costura.Fody">
       <Version>5.7.0</Version>
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
